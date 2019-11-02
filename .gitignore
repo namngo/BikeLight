@@ -1,0 +1,5 @@
+board/carlightboard/BoardOutput/
+output/
+*.zip
+*.b#*
+*.s#*
