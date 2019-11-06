@@ -1988,8 +1988,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="U$1" library="CustomParts" deviceset="MP2410" device=""/>
 <part name="U$2" library="CustomParts" deviceset="MP2410" device=""/>
 <part name="VIN" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
-<part name="VOUT-1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
-<part name="VOUT-2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
+<part name="VOUT-1-1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
+<part name="VOUT-2-1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
 <part name="DIM-1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X1" device="" package3d_urn="urn:adsk.eagle:package:22485/2"/>
 <part name="DIM-2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X1" device="" package3d_urn="urn:adsk.eagle:package:22485/2"/>
 <part name="GND1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -2016,6 +2016,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="GND10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R1-SENSE1-2" library="SparkFun-Passives" deviceset="RESISTOR" device="1206" value="200mO"/>
 <part name="R2-SENSE-2" library="SparkFun-Passives" deviceset="RESISTOR" device="1206" value="200mO"/>
+<part name="VOUT-1-2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
+<part name="VOUT-2-2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
 </parts>
 <sheets>
 <sheet>
@@ -2042,11 +2044,11 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="NAME" x="-69.85" y="93.345" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="-69.85" y="104.14" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="VOUT-1" gate="G$1" x="66.04" y="93.98" smashed="yes" rot="R180">
+<instance part="VOUT-1-1" gate="G$1" x="66.04" y="93.98" smashed="yes" rot="R180">
 <attribute name="NAME" x="72.39" y="88.265" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="72.39" y="99.06" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="VOUT-2" gate="G$1" x="66.04" y="55.88" smashed="yes" rot="R180">
+<instance part="VOUT-2-1" gate="G$1" x="66.04" y="55.88" smashed="yes" rot="R180">
 <attribute name="NAME" x="72.39" y="50.165" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="72.39" y="60.96" size="1.778" layer="96" rot="R180"/>
 </instance>
@@ -2123,6 +2125,14 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <instance part="R2-SENSE-2" gate="G$1" x="50.8" y="43.18" smashed="yes" rot="R90">
 <attribute name="NAME" x="56.9214" y="34.29" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="54.102" y="39.37" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="VOUT-1-2" gate="G$1" x="76.2" y="93.98" smashed="yes" rot="R180">
+<attribute name="NAME" x="85.09" y="98.425" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="82.55" y="99.06" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="VOUT-2-2" gate="G$1" x="76.2" y="55.88" smashed="yes" rot="R180">
+<attribute name="NAME" x="85.09" y="60.325" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="82.55" y="60.96" size="1.778" layer="96" rot="R180"/>
 </instance>
 </instances>
 <busses>
@@ -2232,7 +2242,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <junction x="25.4" y="96.52"/>
 </segment>
 </net>
-<net name="N$4" class="0">
+<net name="N-OUT-1-P" class="0">
 <segment>
 <pinref part="L1" gate="G$1" pin="2"/>
 <pinref part="COUT-1" gate="G$1" pin="1"/>
@@ -2240,8 +2250,11 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="48.26" y1="96.52" x2="60.96" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="60.96" y1="96.52" x2="60.96" y2="93.98" width="0.1524" layer="91"/>
 <junction x="48.26" y="96.52"/>
-<pinref part="VOUT-1" gate="G$1" pin="2"/>
+<pinref part="VOUT-1-1" gate="G$1" pin="2"/>
 <wire x1="60.96" y1="93.98" x2="68.58" y2="93.98" width="0.1524" layer="91"/>
+<pinref part="VOUT-1-2" gate="G$1" pin="2"/>
+<wire x1="68.58" y1="93.98" x2="78.74" y2="93.98" width="0.1524" layer="91"/>
+<junction x="68.58" y="93.98"/>
 </segment>
 </net>
 <net name="N$5" class="0">
@@ -2256,7 +2269,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <junction x="25.4" y="58.42"/>
 </segment>
 </net>
-<net name="N$6" class="0">
+<net name="N-OUT-2-P" class="0">
 <segment>
 <pinref part="L2" gate="G$1" pin="2"/>
 <pinref part="COUT-2" gate="G$1" pin="1"/>
@@ -2264,8 +2277,11 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="48.26" y1="58.42" x2="60.96" y2="58.42" width="0.1524" layer="91"/>
 <junction x="48.26" y="58.42"/>
 <wire x1="60.96" y1="58.42" x2="60.96" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="VOUT-2" gate="G$1" pin="2"/>
+<pinref part="VOUT-2-1" gate="G$1" pin="2"/>
 <wire x1="60.96" y1="55.88" x2="68.58" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="VOUT-2-2" gate="G$1" pin="2"/>
+<wire x1="78.74" y1="55.88" x2="68.58" y2="55.88" width="0.1524" layer="91"/>
+<junction x="68.58" y="55.88"/>
 </segment>
 </net>
 <net name="N$8" class="0">
@@ -2276,7 +2292,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="20.32" y1="88.9" x2="20.32" y2="91.44" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$9" class="0">
+<net name="N-OUT-2-N" class="0">
 <segment>
 <pinref part="COUT-2" gate="G$1" pin="2"/>
 <pinref part="R2-FB" gate="G$1" pin="2"/>
@@ -2287,12 +2303,15 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <junction x="43.18" y="50.8"/>
 <wire x1="48.26" y1="50.8" x2="60.96" y2="50.8" width="0.1524" layer="91"/>
 <junction x="48.26" y="50.8"/>
-<pinref part="VOUT-2" gate="G$1" pin="1"/>
+<pinref part="VOUT-2-1" gate="G$1" pin="1"/>
 <wire x1="68.58" y1="53.34" x2="60.96" y2="53.34" width="0.1524" layer="91"/>
 <wire x1="60.96" y1="50.8" x2="60.96" y2="53.34" width="0.1524" layer="91"/>
 <pinref part="R2-SENSE-2" gate="G$1" pin="2"/>
 <wire x1="43.18" y1="48.26" x2="50.8" y2="48.26" width="0.1524" layer="91"/>
 <junction x="43.18" y="48.26"/>
+<pinref part="VOUT-2-2" gate="G$1" pin="1"/>
+<wire x1="78.74" y1="53.34" x2="68.58" y2="53.34" width="0.1524" layer="91"/>
+<junction x="68.58" y="53.34"/>
 </segment>
 </net>
 <net name="N$10" class="0">
@@ -2303,9 +2322,9 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="20.32" y1="50.8" x2="20.32" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$12" class="0">
+<net name="N-OUT-1-N" class="0">
 <segment>
-<pinref part="VOUT-1" gate="G$1" pin="1"/>
+<pinref part="VOUT-1-1" gate="G$1" pin="1"/>
 <wire x1="68.58" y1="91.44" x2="60.96" y2="91.44" width="0.1524" layer="91"/>
 <wire x1="60.96" y1="91.44" x2="60.96" y2="88.9" width="0.1524" layer="91"/>
 <pinref part="COUT-1" gate="G$1" pin="2"/>
@@ -2320,6 +2339,9 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="R1-SENSE1-2" gate="G$1" pin="1"/>
 <wire x1="43.18" y1="86.36" x2="53.34" y2="86.36" width="0.1524" layer="91"/>
 <junction x="43.18" y="86.36"/>
+<pinref part="VOUT-1-2" gate="G$1" pin="1"/>
+<wire x1="68.58" y1="91.44" x2="78.74" y2="91.44" width="0.1524" layer="91"/>
+<junction x="68.58" y="91.44"/>
 </segment>
 </net>
 <net name="N$7" class="0">
