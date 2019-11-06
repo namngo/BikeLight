@@ -738,6 +738,30 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <via x="66.04" y="59.69" extent="1-16" drill="0.35"/>
 <via x="55.88" y="59.69" extent="1-16" drill="0.35"/>
 <via x="54.61" y="59.69" extent="1-16" drill="0.35"/>
+<via x="44.45" y="57.15" extent="1-16" drill="0.35"/>
+<via x="44.45" y="50.8" extent="1-16" drill="0.35"/>
+<via x="44.45" y="52.07" extent="1-16" drill="0.35"/>
+<via x="45.72" y="52.07" extent="1-16" drill="0.35"/>
+<via x="45.72" y="50.8" extent="1-16" drill="0.35"/>
+<via x="45.72" y="53.34" extent="1-16" drill="0.35"/>
+<via x="44.45" y="53.34" extent="1-16" drill="0.35"/>
+<via x="44.45" y="55.88" extent="1-16" drill="0.35"/>
+<via x="45.72" y="55.88" extent="1-16" drill="0.35"/>
+<via x="45.72" y="57.15" extent="1-16" drill="0.35"/>
+<via x="66.04" y="60.96" extent="1-16" drill="0.35"/>
+<via x="63.5" y="60.96" extent="1-16" drill="0.35"/>
+<via x="64.77" y="60.96" extent="1-16" drill="0.35"/>
+<via x="62.23" y="60.96" extent="1-16" drill="0.35"/>
+<via x="60.96" y="60.96" extent="1-16" drill="0.35"/>
+<via x="55.88" y="60.96" extent="1-16" drill="0.35"/>
+<via x="54.61" y="60.96" extent="1-16" drill="0.35"/>
+<via x="72.39" y="49.53" extent="1-16" drill="0.35"/>
+<via x="72.39" y="50.8" extent="1-16" drill="0.35"/>
+<via x="69.85" y="50.8" extent="1-16" drill="0.35"/>
+<via x="69.85" y="49.53" extent="1-16" drill="0.35"/>
+<via x="68.58" y="49.53" extent="1-16" drill="0.35"/>
+<via x="66.04" y="49.53" extent="1-16" drill="0.35"/>
+<via x="64.77" y="50.8" extent="1-16" drill="0.35"/>
 </signal>
 <signal name="N$2">
 <contactref element="U$1" pad="5"/>
@@ -886,78 +910,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <contactref element="CBST-2" pad="1"/>
 <wire x1="30.85" y1="52.07" x2="29.678" y2="53.242" width="0.254" layer="1"/>
 <wire x1="29.678" y1="53.242" x2="29.678" y2="54.549" width="0.254" layer="1"/>
-</signal>
-<signal name="N$4">
-<via x="45.72" y="57.15" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$6">
-<via x="45.72" y="55.88" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$9">
-<via x="45.72" y="53.34" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$12">
-<via x="44.45" y="53.34" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$13">
-<via x="44.45" y="55.88" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$14">
-<via x="44.45" y="57.15" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$15">
-<via x="55.88" y="60.96" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$16">
-<via x="60.96" y="60.96" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$17">
-<via x="63.5" y="60.96" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$18">
-<via x="62.23" y="60.96" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$19">
-<via x="64.77" y="60.96" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$20">
-<via x="66.04" y="60.96" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$21">
-<via x="54.61" y="60.96" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$22">
-<via x="66.04" y="49.53" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$23">
-<via x="68.58" y="49.53" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$24">
-<via x="69.85" y="50.8" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$25">
-<via x="69.85" y="49.53" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$26">
-<via x="72.39" y="49.53" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$27">
-<via x="72.39" y="50.8" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$28">
-<via x="64.77" y="50.8" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$29">
-<via x="44.45" y="52.07" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$30">
-<via x="45.72" y="52.07" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$31">
-<via x="45.72" y="50.8" extent="1-16" drill="0.35"/>
-</signal>
-<signal name="N$32">
-<via x="44.45" y="50.8" extent="1-16" drill="0.35"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
