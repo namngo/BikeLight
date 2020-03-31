@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2020-03-17T02:18:12Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.6.0"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "bike_sensor"
+        },
+        "Owner": "Nam Ngo <nam.ngo.shop@gmail.com>",
+        "Size": {
+            "X": 58.725,
+            "Y": 38.09
+        }
+    }
+}
