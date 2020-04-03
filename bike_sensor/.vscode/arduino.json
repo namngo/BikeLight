@@ -1,6 +1,6 @@
 {
     "sketch": "bike_sensor.ino",
     "board": "arduino:samd:arduino_zero_native",
-    "port": "COM6",
-    "programmer": "ArduinoISP"
+    "port": "/dev/ttyACM0",
+    "programmer": "Atmel-ICE (AVR)"
 }
