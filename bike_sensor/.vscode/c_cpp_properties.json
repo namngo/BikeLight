@@ -3,6 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
+                "C:\\Users\\nam\\Documents\\Arduino\\libraries\\SparkFun_9DoF_IMU_Breakout_-_ICM_20948_-_Arduino_Library\\src",
                 "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
                 "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\samd\\1.8.6\\**"
             ],
@@ -10,7 +11,8 @@
                 "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\samd\\1.8.6\\cores\\arduino\\Arduino.h"
             ],
             "defines": [
-                "ARDUINO=10805"
+                "ARDUINO=10805",
+                "USBCON"
             ],
             "intelliSenseMode": "clang-x64",
             "compilerPath": "h:/arduino/hardware/tools/avr/bin/avr-gcc.exe",

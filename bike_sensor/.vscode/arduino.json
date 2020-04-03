@@ -1,6 +1,6 @@
 {
     "sketch": "bike_sensor.ino",
-    "board": "arduino:samd:arduino_zero_edbg",
+    "board": "arduino:samd:arduino_zero_native",
     "port": "COM6",
     "programmer": "ArduinoISP"
 }

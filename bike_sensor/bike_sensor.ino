@@ -1,11 +1,29 @@
 #include <ICM_20948.h>
-#include <samd.h>
 #include <Wire.h>
+#include <samd.h>
 
+ICM_20948_I2C myICM;
+
+#define AD0_VAL 1
 #define LED_BUILTIN 38
 
 void setup() {
   SerialUSB.begin(115200);
+
+  Wire.begin();
+  Wire.setClock(400000);
+  auto icm_init = false;
+  while (!icm_init) {
+    myICM.begin(Wire, AD0_VAL);
+    SerialUSB.println(myICM.statusString());
+    if (myICM.status != ICM_20948_Stat_Ok) {
+      SerialUSB.println("Trying again...");
+      delay(500);
+    } else {
+      icm_init = true;
+    }
+  }
+
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
