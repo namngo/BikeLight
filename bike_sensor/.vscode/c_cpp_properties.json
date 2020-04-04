@@ -3,15 +3,12 @@
         {
             "name": "Win32",
             "includePath": [
-                "C:\\Users\\nam\\Documents\\Arduino\\libraries\\SparkFun_9DoF_IMU_Breakout_-_ICM_20948_-_Arduino_Library\\src",
+                "C:\\Users\\nam\\Documents\\Arduino\\libraries\\**",
                 "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
-                "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\samd\\1.8.6\\**",
-                "/home/namngo/.arduino15/packages/arduino/hardware/samd/1.8.6/**",
-                "/home/namngo/.arduino15/packages/arduino/tools/**"
+                "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\samd\\1.8.6\\**"
             ],
             "forcedInclude": [
-                "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\samd\\1.8.6\\cores\\arduino\\Arduino.h",
-                "/home/namngo/.arduino15/packages/arduino/hardware/samd/1.8.6/cores/arduino/Arduino.h"
+                "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\samd\\1.8.6\\cores\\arduino\\Arduino.h"
             ],
             "defines": [
                 "ARDUINO=10805",
@@ -25,7 +22,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "/home/namngo/Arduino/libraries/SparkFun_9DoF_IMU_Breakout_-_ICM_20948_-_Arduino_Library/src",
+                "/home/namngo/Arduino/libraries/**",
                 "/home/namngo/.arduino15/packages/arduino/hardware/samd/1.8.6/**",
                 "/home/namngo/.arduino15/packages/arduino/tools/**"
             ],
