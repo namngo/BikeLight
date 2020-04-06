@@ -1,9 +1,11 @@
 #include <Adafruit_BME280.h>
-#include <ICM_20948.h>
+// #include <ICM_20948.h>
 #include <Wire.h>
 #include <samd.h>
 
-ICM_20948_I2C myICM;
+#include "ICM20948.h"
+
+// ICM_20948_I2C myICM;
 Adafruit_BME280 bme;
 
 #define AD0_VAL 0
@@ -12,8 +14,8 @@ Adafruit_BME280 bme;
 
 void setup() {
   SerialUSB.begin(115200);
-  while (!SerialUSB)
-    ;
+  // while (!SerialUSB)
+  //   ;
   delay(500);
   pinMode(LED_BUILTIN, OUTPUT);
   Wire.begin();
@@ -35,18 +37,18 @@ void setup() {
 
   auto icm_init = false;
 
-  while (!icm_init) {
-    SerialUSB.println("begining icm");
-    myICM.begin(Wire, AD0_VAL);
-    SerialUSB.println(myICM.statusString());
-    if (myICM.status != ICM_20948_Stat_Ok) {
-      SerialUSB.println("Trying again...");
-      delay(500);
-    } else {
-      icm_init = true;
-      SerialUSB.println("init!");
-    }
-  }
+  // while (!icm_init) {
+  //   SerialUSB.println("begining icm");
+  //   myICM.begin(Wire, AD0_VAL);
+  //   SerialUSB.println(myICM.statusString());
+  //   if (myICM.status != ICM_20948_Stat_Ok) {
+  //     SerialUSB.println("Trying again...");
+  //     delay(500);
+  //   } else {
+  //     icm_init = true;
+  //     SerialUSB.println("init!");
+  //   }
+  // }
 }
 
 void printFormattedFloat(float val, uint8_t leading, uint8_t decimals) {
@@ -93,99 +95,88 @@ String get_direction(float x, float y, float z) {
   } else if (y == 0 && x > 0) {
     heading = 0;
   }
+  auto direction = "";
   if (heading > 338 || heading < 22) {
-    return "NORTH";
+    direction = "NORTH";
+  } else if (heading > 22 && heading < 68) {
+    direction = "NORTH-EAST";
+  } else if (heading > 68 && heading < 113) {
+    direction = "EAST";
+  } else if (heading > 113 && heading < 158) {
+    direction = "SOUTH-EAST";
+  } else if (heading > 158 && heading < 203) {
+    direction = "SOUTH";
+  } else if (heading > 203 && heading < 248) {
+    direction = "SOTUH-WEST";
+  } else if (heading > 248 && heading < 293) {
+    direction = "WEST";
+  } else if (heading > 293 && heading < 338) {
+    direction = "NORTH-WEST";
+  } else {
+    direction = "dont know";
   }
-
-  if (heading > 22 && heading < 68) {
-    return "NORTH-EAST";
-  }
-
-  if (heading > 68 && heading < 113) {
-    return "EAST";
-  }
-
-  if (heading > 113 && heading < 158) {
-    return "SOUTH-EAST";
-  }
-
-  if (heading > 158 && heading < 203) {
-    return "SOUTH";
-  }
-
-  if (heading > 203 && heading < 248) {
-    return "SOTUH-WEST";
-  }
-
-  if (heading > 248 && heading < 293) {
-    return "WEST";
-  }
-
-  if (heading > 293 && heading < 338) {
-    return "NORTH-WEST";
-  }
-  return "dont know";
+  return String(heading) + " : " + direction;
 }
 
-void printScaledAGMT(ICM_20948_AGMT_t agmt) {
-  // SerialUSB.print("Scaled. Acc (mg) [ ");
-  // printFormattedFloat(myICM.accX(), 5, 2);
-  // SerialUSB.print(", ");
-  // printFormattedFloat(myICM.accY(), 5, 2);
-  // SerialUSB.print(", ");
-  // printFormattedFloat(myICM.accZ(), 5, 2);
-  // SerialUSB.print(" ], Gyr (DPS) [ ");
-  // printFormattedFloat(myICM.gyrX(), 5, 2);
-  // SerialUSB.print(", ");
-  // printFormattedFloat(myICM.gyrY(), 5, 2);
-  // SerialUSB.print(", ");
-  // printFormattedFloat(myICM.gyrZ(), 5, 2);
-  SerialUSB.print(" ], Mag (uT) [ ");
-  printFormattedFloat(myICM.magX(), 5, 2);
-  SerialUSB.print(", ");
-  printFormattedFloat(myICM.magY(), 5, 2);
-  SerialUSB.print(", ");
-  printFormattedFloat(myICM.magZ(), 5, 2);
-  // SerialUSB.print(" ], Tmp (C) [ ");
-  // printFormattedFloat(myICM.temp(), 5, 2);
-  SerialUSB.print(" ]");
-  SerialUSB.println();
-}
+// void printScaledAGMT(ICM_20948_AGMT_t agmt) {
+//   // SerialUSB.print("Scaled. Acc (mg) [ ");
+//   // printFormattedFloat(myICM.accX(), 5, 2);
+//   // SerialUSB.print(", ");
+//   // printFormattedFloat(myICM.accY(), 5, 2);
+//   // SerialUSB.print(", ");
+//   // printFormattedFloat(myICM.accZ(), 5, 2);
+//   // SerialUSB.print(" ], Gyr (DPS) [ ");
+//   // printFormattedFloat(myICM.gyrX(), 5, 2);
+//   // SerialUSB.print(", ");
+//   // printFormattedFloat(myICM.gyrY(), 5, 2);
+//   // SerialUSB.print(", ");
+//   // printFormattedFloat(myICM.gyrZ(), 5, 2);
+//   SerialUSB.print(" ], Mag (uT) [ ");
+//   printFormattedFloat(myICM.magX(), 5, 2);
+//   SerialUSB.print(", ");
+//   printFormattedFloat(myICM.magY(), 5, 2);
+//   SerialUSB.print(", ");
+//   printFormattedFloat(myICM.magZ(), 5, 2);
+//   // SerialUSB.print(" ], Tmp (C) [ ");
+//   // printFormattedFloat(myICM.temp(), 5, 2);
+//   SerialUSB.print(" ]");
+//   SerialUSB.println();
+// }
 
 void loop() {
   auto temp = bme.readTemperature();
   SerialUSB.println("temp:" + String(temp));
-  if (myICM.dataReady()) {
-    myICM.getAGMT();
-    // printScaledAGMT(myICM.agmt);
-    // float magX = myICM.magX() * 10000;
-    // float magY = myICM.magY() * 10000;
-    // float magZ = myICM.magZ() * 10000;
+  // if (myICM.dataReady()) {
+  //   myICM.getAGMT();
+  //   // printScaledAGMT(myICM.agmt);
+  //   // float magX = myICM.magX() * 10000;
+  //   // float magY = myICM.magY() * 10000;
+  //   // float magZ = myICM.magZ() * 10000;
 
-    float magX = myICM.magX();
-    float magY = myICM.magY();
-    float magZ = myICM.magZ();
+  //   float magX = myICM.magX();
+  //   float magY = myICM.magY();
+  //   float magZ = myICM.magZ();
 
-    // float magX = myICM.agmt.mag.axes.x;
-    // float magY = myICM.agmt.mag.axes.y;
-    // float magZ = myICM.agmt.mag.axes.z;
+  //   // float magX = myICM.agmt.mag.axes.x;
+  //   // float magY = myICM.agmt.mag.axes.y;
+  //   // float magZ = myICM.agmt.mag.axes.z;
 
-    SerialUSB.print(" ], Mag (uT) [ ");
-    printFormattedFloat(magX, 5, 2);
-    SerialUSB.print(", ");
-    printFormattedFloat(magY, 5, 2);
-    SerialUSB.print(", ");
-    printFormattedFloat(magZ, 5, 2);
-    SerialUSB.print(" ]");
-    SerialUSB.println();
+  //   SerialUSB.print(" ], Mag (uT) [ ");
+  //   printFormattedFloat(magX, 5, 2);
+  //   SerialUSB.print(", ");
+  //   printFormattedFloat(magY, 5, 2);
+  //   SerialUSB.print(", ");
+  //   printFormattedFloat(magZ, 5, 2);
+  //   SerialUSB.print(" ]");
+  //   SerialUSB.println();
 
-    auto direction = get_direction(magX, magY, magZ);
-    SerialUSB.println(direction);
-    delay(30);
-  } else {
-    SerialUSB.println("Waiting for data");
-    delay(500);
-  }
+  //   auto direction = get_direction(magX, magY, magZ);
+  //   SerialUSB.println(direction);
+  //   delay(30);
+  // } else {
+  //   SerialUSB.println("Waiting for data");
+  //   delay(500);
+  // }
   delay(2000);
 
   // // SerialUSB.println("reset: " + String(icm_init));
