@@ -5,7 +5,6 @@
 
 ICM_20948_I2C myICM;
 Adafruit_BME280 bme;
-auto icm_init = false;
 
 #define AD0_VAL 0
 #define BME280_ADDR 0x76  // or 0x77
@@ -17,46 +16,184 @@ void setup() {
     ;
   delay(500);
   pinMode(LED_BUILTIN, OUTPUT);
-  SerialUSB.println("sda:" + String(PIN_WIRE_SDA));
-  SerialUSB.println("scl:" + String(PIN_WIRE_SCL));
   Wire.begin();
 
+  SerialUSB.println("begining bme280");
   if (!bme.begin(BME280_ADDR, &Wire)) {
-    Serial.println(
-        "Could not find a valid BME280 sensor, check wiring, address, sensor "
-        "ID!");
-    Serial.print("SensorID was: 0x");
-    Serial.println(bme.sensorID(), 16);
-    Serial.print(
+    SerialUSB.println(
+        "Could not find a valid BME280 sensor, check wiring, address, "
+        "sensorID!");
+    SerialUSB.print("SensorID was: 0x");
+    SerialUSB.print(
         "        ID of 0xFF probably means a bad address, a BMP 180 or BMP "
         "085\n");
-    Serial.print("   ID of 0x56-0x58 represents a BMP 280,\n");
-    Serial.print("        ID of 0x60 represents a BME 280.\n");
-    Serial.print("        ID of 0x61 represents a BME 680.\n");
+    SerialUSB.print("   ID of 0x56-0x58 represents a BMP 280,\n");
+    SerialUSB.print("        ID of 0x60 represents a BME 280.\n");
+    SerialUSB.print("        ID of 0x61 represents a BME 680.\n");
   }
-  // Wire.setClock(400000);
+  SerialUSB.println("done bme280");
+
+  auto icm_init = false;
+
+  while (!icm_init) {
+    SerialUSB.println("begining icm");
+    myICM.begin(Wire, AD0_VAL);
+    SerialUSB.println(myICM.statusString());
+    if (myICM.status != ICM_20948_Stat_Ok) {
+      SerialUSB.println("Trying again...");
+      delay(500);
+    } else {
+      icm_init = true;
+      SerialUSB.println("init!");
+    }
+  }
+}
+
+void printFormattedFloat(float val, uint8_t leading, uint8_t decimals) {
+  float aval = abs(val);
+  if (val < 0) {
+    SerialUSB.print("-");
+  } else {
+    SerialUSB.print(" ");
+  }
+  for (uint8_t indi = 0; indi < leading; indi++) {
+    uint32_t tenpow = 0;
+    if (indi < (leading - 1)) {
+      tenpow = 1;
+    }
+    for (uint8_t c = 0; c < (leading - 1 - indi); c++) {
+      tenpow *= 10;
+    }
+    if (aval < tenpow) {
+      SerialUSB.print("0");
+    } else {
+      break;
+    }
+  }
+  if (val < 0) {
+    SerialUSB.print(-val, decimals);
+  } else {
+    SerialUSB.print(val, decimals);
+  }
+}
+
+String get_direction(float x, float y, float z) {
+  // int heading = atan2(x, y);
+  // if (heading < 0) {
+  //   heading += 360;
+  //   heading = 360 - heading;
+  // }
+  int heading = 0;
+  if (y > 0) {
+    heading = 90 - atan(x / y) * (180 / M_PI);
+  } else if (y < 0) {
+    heading = 270 - atan(x / y) * (180 / M_PI);
+  } else if (y == 0 && x < 0) {
+    heading = 180;
+  } else if (y == 0 && x > 0) {
+    heading = 0;
+  }
+  if (heading > 338 || heading < 22) {
+    return "NORTH";
+  }
+
+  if (heading > 22 && heading < 68) {
+    return "NORTH-EAST";
+  }
+
+  if (heading > 68 && heading < 113) {
+    return "EAST";
+  }
+
+  if (heading > 113 && heading < 158) {
+    return "SOUTH-EAST";
+  }
+
+  if (heading > 158 && heading < 203) {
+    return "SOUTH";
+  }
+
+  if (heading > 203 && heading < 248) {
+    return "SOTUH-WEST";
+  }
+
+  if (heading > 248 && heading < 293) {
+    return "WEST";
+  }
+
+  if (heading > 293 && heading < 338) {
+    return "NORTH-WEST";
+  }
+  return "dont know";
+}
+
+void printScaledAGMT(ICM_20948_AGMT_t agmt) {
+  // SerialUSB.print("Scaled. Acc (mg) [ ");
+  // printFormattedFloat(myICM.accX(), 5, 2);
+  // SerialUSB.print(", ");
+  // printFormattedFloat(myICM.accY(), 5, 2);
+  // SerialUSB.print(", ");
+  // printFormattedFloat(myICM.accZ(), 5, 2);
+  // SerialUSB.print(" ], Gyr (DPS) [ ");
+  // printFormattedFloat(myICM.gyrX(), 5, 2);
+  // SerialUSB.print(", ");
+  // printFormattedFloat(myICM.gyrY(), 5, 2);
+  // SerialUSB.print(", ");
+  // printFormattedFloat(myICM.gyrZ(), 5, 2);
+  SerialUSB.print(" ], Mag (uT) [ ");
+  printFormattedFloat(myICM.magX(), 5, 2);
+  SerialUSB.print(", ");
+  printFormattedFloat(myICM.magY(), 5, 2);
+  SerialUSB.print(", ");
+  printFormattedFloat(myICM.magZ(), 5, 2);
+  // SerialUSB.print(" ], Tmp (C) [ ");
+  // printFormattedFloat(myICM.temp(), 5, 2);
+  SerialUSB.print(" ]");
+  SerialUSB.println();
 }
 
 void loop() {
-  digitalWrite(LED_BUILTIN, HIGH);
-  // Wire.beginTransmission(0x55);
-  // Wire.write(0);
-  // Wire.endTransmission(0x55);
   auto temp = bme.readTemperature();
   SerialUSB.println("temp:" + String(temp));
-  delay(800);
-  // if (!icm_init) {
-  //   SerialUSB.println("begining icm");
-  //   myICM.begin(Wire, AD0_VAL);
-  //   SerialUSB.println("done icm");
-  //   SerialUSB.println(myICM.statusString());
-  //   if (myICM.status != ICM_20948_Stat_Ok) {
-  //     SerialUSB.println("Trying again...");
-  //     // delay(500);
-  //   } else {
-  //     icm_init = true;
-  //   }
-  // }
-  digitalWrite(LED_BUILTIN, LOW);  // turn the LED off by making the voltage LOW
-  delay(800);
+  if (myICM.dataReady()) {
+    myICM.getAGMT();
+    // printScaledAGMT(myICM.agmt);
+    // float magX = myICM.magX() * 10000;
+    // float magY = myICM.magY() * 10000;
+    // float magZ = myICM.magZ() * 10000;
+
+    float magX = myICM.magX();
+    float magY = myICM.magY();
+    float magZ = myICM.magZ();
+
+    // float magX = myICM.agmt.mag.axes.x;
+    // float magY = myICM.agmt.mag.axes.y;
+    // float magZ = myICM.agmt.mag.axes.z;
+
+    SerialUSB.print(" ], Mag (uT) [ ");
+    printFormattedFloat(magX, 5, 2);
+    SerialUSB.print(", ");
+    printFormattedFloat(magY, 5, 2);
+    SerialUSB.print(", ");
+    printFormattedFloat(magZ, 5, 2);
+    SerialUSB.print(" ]");
+    SerialUSB.println();
+
+    auto direction = get_direction(magX, magY, magZ);
+    SerialUSB.println(direction);
+    delay(30);
+  } else {
+    SerialUSB.println("Waiting for data");
+    delay(500);
+  }
+  delay(2000);
+
+  // // SerialUSB.println("reset: " + String(icm_init));
+  // digitalWrite(LED_BUILTIN, LOW);  // turn the LED off by making the voltage
+  // LOW delay(800);
 }
+
+// Note:
+// North: Scaled. Acc (mg) [ -00069.15, -00276.00,  00016.50 ], Tmp (C) [  ]
+//         Mag (uT) [ -00028.05, -00051.00,  00032.40 ]
+//         Mag (uT) [  00010.35,  00046.65,  00024.90 ]
