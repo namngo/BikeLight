@@ -3,16 +3,21 @@
 #include <Wire.h>
 #include <samd.h>
 
-#include "ICM20948.h"
+#include "ICM20948/Icm20948.h"
+#include "ICM20948/Icm20948MPUFifoControl.h"
+#include "ICM20948/SensorTypes.h"
+
+// #include "ICM20948.h"
 
 // ICM_20948_I2C myICM;
-Adafruit_BME280 bme;
+// Adafruit_BME280 bme;
 
+#define ICM_I2C_ADDR_REVA
 #define AD0_VAL 0
 #define BME280_ADDR 0x76  // or 0x77
 #define LED_BUILTIN 38
 
-ICM20948 IMU(Wire, 0x68);
+// ICM20948 IMU(Wire, 0x68);
 
 void setup() {
   SerialUSB.begin(115200);
