@@ -12,6 +12,8 @@ Adafruit_BME280 bme;
 #define BME280_ADDR 0x76  // or 0x77
 #define LED_BUILTIN 38
 
+ICM20948 IMU(Wire, 0x68);
+
 void setup() {
   SerialUSB.begin(115200);
   // while (!SerialUSB)
@@ -19,21 +21,21 @@ void setup() {
   delay(500);
   pinMode(LED_BUILTIN, OUTPUT);
   Wire.begin();
-
-  SerialUSB.println("begining bme280");
-  if (!bme.begin(BME280_ADDR, &Wire)) {
-    SerialUSB.println(
-        "Could not find a valid BME280 sensor, check wiring, address, "
-        "sensorID!");
-    SerialUSB.print("SensorID was: 0x");
-    SerialUSB.print(
-        "        ID of 0xFF probably means a bad address, a BMP 180 or BMP "
-        "085\n");
-    SerialUSB.print("   ID of 0x56-0x58 represents a BMP 280,\n");
-    SerialUSB.print("        ID of 0x60 represents a BME 280.\n");
-    SerialUSB.print("        ID of 0x61 represents a BME 680.\n");
-  }
-  SerialUSB.println("done bme280");
+  Wire.setClock(400000);
+  // SerialUSB.println("begining bme280");
+  // if (!bme.begin(BME280_ADDR, &Wire)) {
+  //   SerialUSB.println(
+  //       "Could not find a valid BME280 sensor, check wiring, address, "
+  //       "sensorID!");
+  //   SerialUSB.print("SensorID was: 0x");
+  //   SerialUSB.print(
+  //       "        ID of 0xFF probably means a bad address, a BMP 180 or BMP "
+  //       "085\n");
+  //   SerialUSB.print("   ID of 0x56-0x58 represents a BMP 280,\n");
+  //   SerialUSB.print("        ID of 0x60 represents a BME 280.\n");
+  //   SerialUSB.print("        ID of 0x61 represents a BME 680.\n");
+  // }
+  // SerialUSB.println("done bme280");
 
   auto icm_init = false;
 
@@ -49,6 +51,20 @@ void setup() {
   //     SerialUSB.println("init!");
   //   }
   // }
+
+  int status = -1;
+  while (status < 0) {
+    status = IMU.begin();
+    SerialUSB.print("status = ");
+    SerialUSB.println(status);
+    if (status < 0) {
+      SerialUSB.println("IMU initialization unsuccessful");
+      SerialUSB.println("Check IMU wiring or try cycling power");
+      SerialUSB.print("Status: ");
+      SerialUSB.println(status);
+      delay(500);
+    }
+  }
 }
 
 void printFormattedFloat(float val, uint8_t leading, uint8_t decimals) {
@@ -144,8 +160,28 @@ String get_direction(float x, float y, float z) {
 // }
 
 void loop() {
-  auto temp = bme.readTemperature();
-  SerialUSB.println("temp:" + String(temp));
+  IMU.readSensor();
+
+  //   // printScaledAGMT(myICM.agmt);
+  float magX = IMU.getMagX_uT();
+  float magY = IMU.getMagY_uT();
+  float magZ = IMU.getMagZ_uT();
+
+  SerialUSB.print(" ], Mag (uT) [ ");
+  printFormattedFloat(magX, 5, 2);
+  SerialUSB.print(", ");
+  printFormattedFloat(magY, 5, 2);
+  SerialUSB.print(", ");
+  printFormattedFloat(magZ, 5, 2);
+  SerialUSB.print(" ]");
+  SerialUSB.println();
+
+  auto direction = get_direction(magX, magY, magZ);
+  SerialUSB.println(direction);
+  delay(30);
+
+  // auto temp = bme.readTemperature();
+  // SerialUSB.println("temp:" + String(temp));
   // if (myICM.dataReady()) {
   //   myICM.getAGMT();
   //   // printScaledAGMT(myICM.agmt);
@@ -188,3 +224,12 @@ void loop() {
 // North: Scaled. Acc (mg) [ -00069.15, -00276.00,  00016.50 ], Tmp (C) [  ]
 //         Mag (uT) [ -00028.05, -00051.00,  00032.40 ]
 //         Mag (uT) [  00010.35,  00046.65,  00024.90 ]
+
+// Sparkfun lib:
+//  ], Mag (uT) [  00038.10,  00001.35,  00029.85 ]
+// 2 : NORTH
+//  ], Mag (uT) [  00038.55,  00001.35,  00028.05 ]
+// 2 : NORTH
+
+//  ], Mag (uT) [  00035.55,  -00002.70,  00024.58 ]
+// 353 : NORTH

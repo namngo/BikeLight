@@ -30,8 +30,8 @@ ICM20948::ICM20948(TwoWire& bus, uint8_t address) {
 
 /* starts communication with the ICM-20948 */
 int ICM20948::begin() {
-  _i2c->begin();             // starting the I2C bus
-  _i2c->setClock(_i2cRate);  // setting the I2C clock
+  //   _i2c->begin();             // starting the I2C bus
+  //   _i2c->setClock(_i2cRate);  // setting the I2C clock
 
   if (changeUserBank(USER_BANK_0, true) <
       0) {  // Make sure that the user bank selection is in sync

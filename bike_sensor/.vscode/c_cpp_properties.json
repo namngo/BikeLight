@@ -3,6 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
+                "${workspaceFolder}/**",
                 "C:\\Users\\nam\\Documents\\Arduino\\libraries\\**",
                 "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
                 "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\samd\\1.8.6\\**",
@@ -25,6 +26,7 @@
         {
             "name": "Linux",
             "includePath": [
+                "${workspaceFolder}/**",
                 "/home/namngo/Arduino/libraries/**",
                 "/home/namngo/.arduino15/packages/arduino/hardware/samd/1.8.6/**",
                 "/home/namngo/.arduino15/packages/arduino/tools/**"
