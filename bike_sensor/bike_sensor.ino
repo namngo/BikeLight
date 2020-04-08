@@ -1,18 +1,23 @@
 #include <Adafruit_BME280.h>
-// #include <ICM_20948.h>
+//  #include <ICM_20948.h>
 #include <Wire.h>
 #include <samd.h>
 
-#include "ICM20948.h"
+#include "ICM20948/Icm20948.h"
+#include "ICM20948/Icm20948MPUFifoControl.h"
+#include "ICM20948/SensorTypes.h"
+
+// #include "ICM20948.h"
 
 // ICM_20948_I2C myICM;
-Adafruit_BME280 bme;
+// Adafruit_BME280 bme;
 
+#define ICM_I2C_ADDR_REVA
 #define AD0_VAL 0
 #define BME280_ADDR 0x76  // or 0x77
 #define LED_BUILTIN 38
 
-ICM20948 IMU(Wire, 0x68);
+// ICM20948 IMU(Wire, 0x68);
 
 void setup() {
   SerialUSB.begin(115200);
@@ -96,16 +101,12 @@ void printFormattedFloat(float val, uint8_t leading, uint8_t decimals) {
 }
 
 String get_direction(float x, float y, float z) {
-  // int heading = atan2(x, y);
-  // if (heading < 0) {
-  //   heading += 360;
-  //   heading = 360 - heading;
-  // }
   int heading = 0;
+
   if (y > 0) {
-    heading = 90 - atan(x / y) * (180 / M_PI);
+    heading = 90 - atan(x / y) * RAD_TO_DEG;
   } else if (y < 0) {
-    heading = 270 - atan(x / y) * (180 / M_PI);
+    heading = 270 - atan(x / y) * RAD_TO_DEG;
   } else if (y == 0 && x < 0) {
     heading = 180;
   } else if (y == 0 && x > 0) {
@@ -134,31 +135,6 @@ String get_direction(float x, float y, float z) {
   return String(heading) + " : " + direction;
 }
 
-// void printScaledAGMT(ICM_20948_AGMT_t agmt) {
-//   // SerialUSB.print("Scaled. Acc (mg) [ ");
-//   // printFormattedFloat(myICM.accX(), 5, 2);
-//   // SerialUSB.print(", ");
-//   // printFormattedFloat(myICM.accY(), 5, 2);
-//   // SerialUSB.print(", ");
-//   // printFormattedFloat(myICM.accZ(), 5, 2);
-//   // SerialUSB.print(" ], Gyr (DPS) [ ");
-//   // printFormattedFloat(myICM.gyrX(), 5, 2);
-//   // SerialUSB.print(", ");
-//   // printFormattedFloat(myICM.gyrY(), 5, 2);
-//   // SerialUSB.print(", ");
-//   // printFormattedFloat(myICM.gyrZ(), 5, 2);
-//   SerialUSB.print(" ], Mag (uT) [ ");
-//   printFormattedFloat(myICM.magX(), 5, 2);
-//   SerialUSB.print(", ");
-//   printFormattedFloat(myICM.magY(), 5, 2);
-//   SerialUSB.print(", ");
-//   printFormattedFloat(myICM.magZ(), 5, 2);
-//   // SerialUSB.print(" ], Tmp (C) [ ");
-//   // printFormattedFloat(myICM.temp(), 5, 2);
-//   SerialUSB.print(" ]");
-//   SerialUSB.println();
-// }
-
 void loop() {
   IMU.readSensor();
 
@@ -180,44 +156,7 @@ void loop() {
   SerialUSB.println(direction);
   delay(30);
 
-  // auto temp = bme.readTemperature();
-  // SerialUSB.println("temp:" + String(temp));
-  // if (myICM.dataReady()) {
-  //   myICM.getAGMT();
-  //   // printScaledAGMT(myICM.agmt);
-  //   // float magX = myICM.magX() * 10000;
-  //   // float magY = myICM.magY() * 10000;
-  //   // float magZ = myICM.magZ() * 10000;
-
-  //   float magX = myICM.magX();
-  //   float magY = myICM.magY();
-  //   float magZ = myICM.magZ();
-
-  //   // float magX = myICM.agmt.mag.axes.x;
-  //   // float magY = myICM.agmt.mag.axes.y;
-  //   // float magZ = myICM.agmt.mag.axes.z;
-
-  //   SerialUSB.print(" ], Mag (uT) [ ");
-  //   printFormattedFloat(magX, 5, 2);
-  //   SerialUSB.print(", ");
-  //   printFormattedFloat(magY, 5, 2);
-  //   SerialUSB.print(", ");
-  //   printFormattedFloat(magZ, 5, 2);
-  //   SerialUSB.print(" ]");
-  //   SerialUSB.println();
-
-  //   auto direction = get_direction(magX, magY, magZ);
-  //   SerialUSB.println(direction);
-  //   delay(30);
-  // } else {
-  //   SerialUSB.println("Waiting for data");
-  //   delay(500);
-  // }
   delay(2000);
-
-  // // SerialUSB.println("reset: " + String(icm_init));
-  // digitalWrite(LED_BUILTIN, LOW);  // turn the LED off by making the voltage
-  // LOW delay(800);
 }
 
 // Note:
