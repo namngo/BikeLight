@@ -26,6 +26,7 @@
         {
             "name": "Linux",
             "includePath": [
+                "/home/namngo/Arduino/libraries/SparkFun_MPU-9250_9_DOF_IMU_Breakout/src",
                 "${workspaceFolder}/**",
                 "/home/namngo/Arduino/libraries/**",
                 "/home/namngo/.arduino15/packages/arduino/hardware/samd/1.8.6/**",
