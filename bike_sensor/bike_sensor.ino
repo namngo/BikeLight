@@ -10,22 +10,23 @@
 #define BME280_ADDR 0x76  // or 0x77
 #define LED_BUILTIN 38
 
-MPU9250 myIMU(MPU9250_ADDRESS, Wire, I2C_CLOCK);
+// MPU9250 myIMU(MPU9250_ADDRESS, Wire, I2C_CLOCK);
 
 void setup() {
   SerialUSB.begin(115200);
-  // while (!SerialUSB)
-  //   ;
+  while (!SerialUSB)
+    ;
   delay(500);
   pinMode(LED_BUILTIN, OUTPUT);
-  Wire.begin();
-  Wire.setClock(400000);
 
-  byte c = myIMU.readByte(MPU9250_ADDRESS, WHO_AM_I_MPU9250);
-  Serial.print(F("MPU9250 I AM 0x"));
-  Serial.print(c, HEX);
-  Serial.print(F(" I should be 0x"));
-  Serial.println(0x71, HEX);
+  SerialUSB.println("init!");
+  // Wire.begin();
+  // Wire.setClock(400000);
+  // byte c = myIMU.readByte(MPU9250_ADDRESS, WHO_AM_I_MPU9250);
+  // SerialUSB.print(F("MPU9250 I AM 0x"));
+  // SerialUSB.print(c, HEX);
+  // SerialUSB.print(F(" I should be 0x"));
+  // SerialUSB.println(0x71, HEX);
 
   auto icm_init = false;
 
@@ -35,11 +36,11 @@ void setup() {
 void loop() {
   // IMU.readSensor();
 
-  byte c = myIMU.readByte(MPU9250_ADDRESS, WHO_AM_I_MPU9250);
-  Serial.print(F("MPU9250 I AM 0x"));
-  Serial.print(c, HEX);
-  Serial.print(F(" I should be 0x"));
-  Serial.println(0x71, HEX);
+  // byte c = myIMU.readByte(MPU9250_ADDRESS, WHO_AM_I_MPU9250);
+  // SerialUSB.print(F("MPU9250 I AM 0x"));
+  // SerialUSB.print(c, HEX);
+  // SerialUSB.print(F(" I should be 0x"));
+  // SerialUSB.println(0x71, HEX);
 
   //   // printScaledAGMT(myICM.agmt);
   // float magX = IMU.getMagX_uT();

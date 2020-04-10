@@ -11,8 +11,7 @@
                 "/home/namngo/.arduino15/packages/arduino/tools/**"
             ],
             "forcedInclude": [
-                "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\samd\\1.8.6\\cores\\arduino\\Arduino.h",
-                "/home/namngo/.arduino15/packages/arduino/hardware/samd/1.8.6/cores/arduino/Arduino.h"
+                "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\samd\\1.8.6\\cores\\arduino\\Arduino.h"
             ],
             "defines": [
                 "ARDUINO=10805",
