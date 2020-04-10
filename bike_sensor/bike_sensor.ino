@@ -10,7 +10,7 @@
 #define BME280_ADDR 0x76  // or 0x77
 #define LED_BUILTIN 38
 
-MPU9250 myIMU(MPU9250_ADDRESS, Wire, I2C_CLOCK);
+// MPU9250 myIMU(MPU9250_ADDRESS, Wire, I2C_CLOCK);
 
 void InitIMU(Serial_ Serial, MPU9250 myIMU) {
   byte c = myIMU.readByte(MPU9250_ADDRESS, WHO_AM_I_MPU9250);
@@ -87,13 +87,11 @@ void InitIMU(Serial_ Serial, MPU9250 myIMU) {
 
 void setup() {
   SerialUSB.begin(115200);
-  // while (!SerialUSB)
-  //   ;
+  while (!SerialUSB)
+    ;
   delay(500);
   delay(5500);
   pinMode(LED_BUILTIN, OUTPUT);
-  Wire.begin();
-  Wire.setClock(400000);
 
   InitIMU(SerialUSB, myIMU);
 
