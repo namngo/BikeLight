@@ -7,7 +7,7 @@
 #define BME280_ADDR 0x76  // or 0x77
 #define LED_BUILTIN 38
 
-MPU9250 imu(Wire, 0x68);
+MPU9250 imu(Wire, (uint8_t)0x68);
 
 void setup() {
   SerialUSB.begin(115200);
@@ -24,7 +24,6 @@ void setup() {
 }
 
 void loop() {
-  // IMU.readSensor();
   SerialUSB.println("loop");
   imu.readSensor();
 
