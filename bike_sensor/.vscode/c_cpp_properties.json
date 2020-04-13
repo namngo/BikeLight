@@ -11,7 +11,8 @@
                 "/home/namngo/.arduino15/packages/arduino/tools/**"
             ],
             "forcedInclude": [
-                "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\samd\\1.8.6\\cores\\arduino\\Arduino.h"
+                "C:\\Users\\nam\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\samd\\1.8.6\\cores\\arduino\\Arduino.h",
+                "/home/namngo/.arduino15/packages/arduino/hardware/samd/1.8.6/cores/arduino/Arduino.h"
             ],
             "defines": [
                 "ARDUINO=10805",
@@ -25,6 +26,7 @@
         {
             "name": "Linux",
             "includePath": [
+                "/home/namngo/Arduino/libraries/Bolder_Flight_Systems_MPU9250/src",
                 "/home/namngo/Arduino/libraries/SparkFun_MPU-9250_9_DOF_IMU_Breakout/src",
                 "${workspaceFolder}/**",
                 "/home/namngo/Arduino/libraries/**",
