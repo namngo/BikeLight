@@ -3,6 +3,9 @@
 #include <Wire.h>
 #include <samd.h>
 
+// #include <sstream>
+// #include <string>
+
 #define I2C_CLOCK 400000
 #define BME280_ADDR 0x76  // or 0x77
 #define LED_BUILTIN 38
@@ -30,6 +33,17 @@ void loop() {
   float magX = imu.getMagX_uT();
   float magY = imu.getMagY_uT();
   float magZ = imu.getMagZ_uT();
+
+  // std::stringstream ss;
+  // ss.precision(1);
+
+  // ss << std::fixed << "bX=" << imu.getMagBiasX_uT() << ", "
+  //    << "bY=" << imu.getMagBiasY_uT() << ", "
+  //    << "bZ=" << imu.getMagBiasZ_uT() << ", "
+  //    << "sX=" << imu.getMagScaleFactorX() << ", "
+  //    << "sY=" << imu.getMagScaleFactorY() << ", "
+  //    << "sZ=" << imu.getMagScaleFactorZ() << ", " << std::endl;
+  // SerialUSB.println(ss.str().c_str());
 
   //   // printScaledAGMT(myICM.agmt);
 
