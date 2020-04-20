@@ -3,6 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
+                "C:\\Users\\nam\\Documents\\Arduino\\libraries\\Bolder_Flight_Systems_MPU9250\\src",
                 "${workspaceFolder}/**",
                 "C:/Users/nam/AppData/Local/Arduino15/packages/esp32/tools/**",
                 "C:/Users/nam/AppData/Local/Arduino15/packages/esp32/hardware/esp32/1.0.4/**",
