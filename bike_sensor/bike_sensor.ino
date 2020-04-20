@@ -12,6 +12,10 @@
 #define SCL_PIN 22
 #define MPU_INT_PIN 19
 
+// 8 fig vertical and hoz: bX=39.0, bY=52.0, bZ=18.1, sX=1.0, sY=0.8, sZ=1.4,
+// Scale X, bias X, scale Y, bias Y...
+std::vector<float> MpuCalibrated = {1.0, 39.0, 0.8, 52.0, 1.4, 1.0};
+
 MPU9250 imu(Wire, 0x68);
 
 /* EEPROM buffer to mag bias and scale factors */
