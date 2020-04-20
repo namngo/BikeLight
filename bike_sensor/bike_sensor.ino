@@ -6,7 +6,9 @@
 #include <string>
 
 #include "EEPROM.h"
+#include "PositionSensor.h"
 #include "SPI.h"
+#include "bike_light_util.h"
 
 #define SDA_PIN 21
 #define SCL_PIN 22
@@ -14,9 +16,11 @@
 
 float window_size = 20;
 
+using namespace BikeLight;
+
 // 8 fig vertical and hoz: bX=39.0, bY=52.0, bZ=18.1, sX=1.0, sY=0.8, sZ=1.4,
 // bias X, Scale X, bias Y, scale Y...
-std::vector<float> CalData = {39.0, 1.0, 52.0, 0.8, 18.1, 1.4};
+std::vector<float> MagCal = {39.0, 1.0, 52.0, 0.8, 18.1, 1.4};
 
 MPU9250 imu(Wire, 0x68);
 
@@ -42,10 +46,6 @@ void setup() {
     }
   }
 
-  imu.setMagCalX(CalData[0], CalData[1]);
-  imu.setMagCalY(CalData[2], CalData[3]);
-  imu.setMagCalZ(CalData[4], CalData[5]);
-
   // Wire.begin(SDA_PIN, SCL_PIN);
 
   // Wire.setClock(400000);
@@ -66,10 +66,9 @@ void setup() {
 }
 
 void getCalibratedData() {
-  std::stringstream ss;
-  ss.precision(1);
+  std::stringstream ss = get_fixed_stringstream();
 
-  ss << std::fixed << "bX=" << imu.getMagBiasX_uT() << ", "
+  ss << "bX=" << imu.getMagBiasX_uT() << ", "
      << "bY=" << imu.getMagBiasY_uT() << ", "
      << "bZ=" << imu.getMagBiasZ_uT() << ", "
      << "sX=" << imu.getMagScaleFactorX() << ", "
@@ -80,21 +79,24 @@ void getCalibratedData() {
 
 void loop() {
   imu.readSensor();
-  float magX = imu.getMagX_uT();
-  float magY = imu.getMagY_uT();
-  float magZ = imu.getMagZ_uT();
 
-  std::stringstream ss;
-  ss.precision(1);
-  ss << std::fixed << "Mag (uT) [" << magX << ", " << magY << ", " << magZ
-     << "]" << std::endl;
+  float ax = imu.getAccelX_mss();
+  float ay = imu.getAccelY_mss();
+  float az = imu.getAccelZ_mss();
+
+  float hx = imu.getMagX_uT();
+  float hy = imu.getMagY_uT();
+  float hz = imu.getMagZ_uT();
+
+  std::stringstream ss = get_fixed_stringstream();
+  ss << "Mag (uT) [" << hx << ", " << hy << ", " << hz << "]" << std::endl;
   Serial.println(ss.str().c_str());
 
-  auto direction = get_direction(magX, magY, magZ);
+  auto direction = get_direction(hx, hy, hz);
   // auto direction = get_direction(-11.3, 14.3, -47.4);
   Serial.println(direction);
 
-  auto heading = get_heading(magX, magY, magZ);
+  auto heading = get_heading(hx, hy, hz, ax, ay, az);
 
   delay(3000);
 }
@@ -111,27 +113,61 @@ void loop() {
 // ], Mag (uT) [  00073.24,  00051.40,  00034.79 ]
 // Borderflight calibreated:
 // Mag (uT) [  00039.47,  00007.19,  00027.02 ]
+//
+// No-accelerometer heading:
+// 86 EAST
+// yaw_rad: -1.5, yaw_deg: -87.0
+// , heading_rad: 4.8, heading_deg:273.0
+// , filtered_heading_rad:0.2, filtered_heading_deg: 13.6
+//
+// accelerometer heading:
+//
+// 88 : EAST
+// yaw_rad: -1.8, yaw_deg: -102.3
+// , heading_rad: 4.5, heading_deg:257.7
+// , filtered_heading_rad:3.3, filtered_heading_deg: 189.8
+//
+// 144 : SOUTH-EAST
+// yaw_rad: -2.5, yaw_deg: -140.6
+// , heading_rad: 3.8, heading_deg:219.4
+// , filtered_heading_rad:4.0, filtered_heading_deg: 229.2
 
-String get_heading(float hx, float hy, float hz) {
+float filtered_heading_rad;
+String get_heading(float hx, float hy, float hz, float ax, float ay, float az) {
+  /* Normalize accelerometer and magnetometer data */
+  float a = sqrtf(ax * ax + ay * ay + az * az);
+  ax /= a;
+  ay /= a;
+  az /= a;
+
   float h = sqrtf(hx * hx + hy * hy + hz * hz);
   hx /= h;
   hy /= h;
   hz /= h;
 
   /* Compute euler angles */
-  float yaw_rad = atan2f(-hy, hx);
+  float pitch_rad = asinf(ax);
+  float roll_rad = asinf(-ay / cosf(pitch_rad));
+  float yaw_rad =
+      atan2f(hz * sinf(roll_rad) - hy * cosf(roll_rad),
+             hx * cosf(pitch_rad) + hy * sinf(pitch_rad) * sinf(roll_rad) +
+                 hz * sinf(pitch_rad) * cosf(roll_rad));
   float heading_rad = constrainAngle360(yaw_rad);
   /* Filtering heading */
-  float filtered_heading_rad =
+  filtered_heading_rad =
       (filtered_heading_rad * (window_size - 1.0f) + heading_rad) / window_size;
 
   /* Display the results */
-  Serial.print(yaw_rad * RAD_TO_DEG);
-  Serial.print("\t");
-  Serial.print(heading_rad * RAD_TO_DEG);
-  Serial.print("\t");
-  Serial.println(filtered_heading_rad * RAD_TO_DEG);
+  std::stringstream ss = get_fixed_stringstream();
 
+  ss << "yaw_rad: " << yaw_rad << ", yaw_deg: " << yaw_rad * RAD_TO_DEG
+     << std::endl
+     << ", heading_rad: " << heading_rad
+     << ", heading_deg:" << heading_rad * RAD_TO_DEG << std::endl
+     << ", filtered_heading_rad:" << filtered_heading_rad
+     << ", filtered_heading_deg: " << filtered_heading_rad * RAD_TO_DEG
+     << std::endl;
+  Serial.println(ss.str().c_str());
   return "";
 }
 
@@ -166,7 +202,7 @@ String get_direction(float x, float y, float z) {
   } else if (heading > 158 && heading < 203) {
     direction = "SOUTH";
   } else if (heading > 203 && heading < 248) {
-    direction = "SOTUH-WEST";
+    direction = "SOUTH-WEST";
   } else if (heading > 248 && heading < 293) {
     direction = "WEST";
   } else if (heading > 293 && heading < 338) {

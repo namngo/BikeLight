@@ -28,6 +28,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/home/namngo/Arduino/libraries/**",
+                "/home/namngo/Arduino/libraries/Bolder_Flight_Systems_MPU9250/src",
                 "/home/namngo/Arduino/libraries/SparkFun_MPU_9250_DMP_Arduino_Library/src",
                 "/home/namngo/.arduino15/packages/arduino/hardware/samd/1.8.6/**",
                 "/home/namngo/.arduino15/packages/arduino/tools/**"
