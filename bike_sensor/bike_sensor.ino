@@ -18,11 +18,7 @@ float window_size = 20;
 
 using namespace BikeLight;
 
-// 8 fig vertical and hoz: bX=39.0, bY=52.0, bZ=18.1, sX=1.0, sY=0.8, sZ=1.4,
-// bias X, Scale X, bias Y, scale Y...
-std::vector<float> MagCal = {39.0, 1.0, 52.0, 0.8, 18.1, 1.4};
-
-MPU9250 imu(Wire, 0x68);
+PositionSensor pos_sensor;
 
 /* EEPROM buffer to mag bias and scale factors */
 uint8_t eeprom_buffer[24];
@@ -31,20 +27,7 @@ float value;
 void setup() {
   Serial.begin(115200);
 
-  // start communication with IMU
-  while (1) {
-    int status = imu.begin();
-    if (status < 0) {
-      Serial.println("IMU initialization unsuccessful");
-      Serial.println("Check IMU wiring or try cycling power");
-      Serial.print("Status: ");
-      Serial.println(status);
-      delay(1000);
-    } else {
-      Serial.println("init'ed mpu9250");
-      break;
-    }
-  }
+  pos_sensor.begin();
 
   // Wire.begin(SDA_PIN, SCL_PIN);
 
@@ -65,40 +48,13 @@ void setup() {
   // Serial.println("done bme280");
 }
 
-void getCalibratedData() {
-  std::stringstream ss = get_fixed_stringstream();
-
-  ss << "bX=" << imu.getMagBiasX_uT() << ", "
-     << "bY=" << imu.getMagBiasY_uT() << ", "
-     << "bZ=" << imu.getMagBiasZ_uT() << ", "
-     << "sX=" << imu.getMagScaleFactorX() << ", "
-     << "sY=" << imu.getMagScaleFactorY() << ", "
-     << "sZ=" << imu.getMagScaleFactorZ() << ", " << std::endl;
-  Serial.println(ss.str().c_str());
-}
-
 void loop() {
-  imu.readSensor();
+  auto heading = pos_sensor.read_direction(true);
+  Serial.println(heading.c_str());
+  Serial.println();
+  Serial.println();
 
-  float ax = imu.getAccelX_mss();
-  float ay = imu.getAccelY_mss();
-  float az = imu.getAccelZ_mss();
-
-  float hx = imu.getMagX_uT();
-  float hy = imu.getMagY_uT();
-  float hz = imu.getMagZ_uT();
-
-  std::stringstream ss = get_fixed_stringstream();
-  ss << "Mag (uT) [" << hx << ", " << hy << ", " << hz << "]" << std::endl;
-  Serial.println(ss.str().c_str());
-
-  auto direction = get_direction(hx, hy, hz);
-  // auto direction = get_direction(-11.3, 14.3, -47.4);
-  Serial.println(direction);
-
-  auto heading = get_heading(hx, hy, hz, ax, ay, az);
-
-  delay(3000);
+  delay(1000);
 }
 
 // CalibratedData:

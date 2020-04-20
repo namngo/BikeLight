@@ -20,8 +20,11 @@ class PositionSensor {
 
   int begin() {
     int status = imu.begin();
-    if (status < 0) {
-      return status;
+
+    while (status < 0) {
+      Serial.println("MPU9250 init unsuccessful. Trying again...");
+      delay(1000);
+      status = imu.begin();
     }
 
     imu.setDlpfBandwidth(MPU9250::DLPF_BANDWIDTH_10HZ);
@@ -34,7 +37,7 @@ class PositionSensor {
     return status;
   }
 
-  float read_heading() {
+  float read_heading(bool print_debug = false) {
     imu.readSensor();
 
     float ax = imu.getAccelX_mss();
@@ -64,13 +67,28 @@ class PositionSensor {
                    hz * sinf(pitch_rad) * cosf(roll_rad));
     float heading_rad = constrainAngle360(yaw_rad);
 
+    float heading_rad_noacc = constrainAngle360(atan2f(-hy, hx));
+
     float heading_deg = heading_rad * RAD_TO_DEG;
+
+    if (print_debug) {
+      /* Display the results */
+      std::stringstream ss = get_fixed_stringstream();
+
+      ss << "yaw_rad: " << yaw_rad << ", yaw_deg: " << yaw_rad * RAD_TO_DEG
+         << std::endl
+         << ", heading_rad: " << heading_rad
+         << ", heading_deg:" << heading_rad * RAD_TO_DEG << std::endl
+         << ", heading_nooacc_deg" << heading_rad_noacc * RAD_TO_DEG
+         << std::endl;
+      Serial.println(ss.str().c_str());
+    }
 
     return heading_deg;
   }
 
-  std::string read_direction() {
-    float heading = read_heading();
+  std::string read_direction(bool print_debug = false) {
+    float heading = read_heading(print_debug);
     return heading_to_direction(heading);
   }
 
@@ -95,6 +113,8 @@ class PositionSensor {
 
   std::string heading_to_direction(float heading) const {
     std::string direction = "";
+    Serial.println("heading:" + String(heading));
+
     if (heading > 338 || heading < 22) {
       direction = "NORTH";
     } else if (heading > 22 && heading < 68) {
@@ -118,6 +138,9 @@ class PositionSensor {
   }
 
   MPU9250 imu;
+
+  // 8 fig vertical and hoz: bX=39.0, bY=52.0, bZ=18.1, sX=1.0, sY=0.8, sZ=1.4,
+  // bias X, Scale X, bias Y, scale Y...
   std::vector<float> MagCal = {39.0, 1.0, 52.0, 0.8, 18.1, 1.4};
 };
 }  // namespace BikeLight
