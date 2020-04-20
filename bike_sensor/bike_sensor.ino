@@ -1,20 +1,18 @@
 #include <Arduino.h>
 #include <MPU9250.h>
-
-#include "SPI.h"
-// #include <Esp.h>
 #include <Wire.h>
 
-#include "EEPROM.h"
+#include <sstream>
+#include <string>
 
-// #include <sstream>
-// #include <string>
+#include "EEPROM.h"
+#include "SPI.h"
 
 #define SDA_PIN 21
 #define SCL_PIN 22
 #define MPU_INT_PIN 19
 
-MPU9250 IMU(Wire, 0x68);
+MPU9250 imu(Wire, 0x68);
 
 /* EEPROM buffer to mag bias and scale factors */
 uint8_t eeprom_buffer[24];
@@ -22,11 +20,10 @@ float value;
 
 void setup() {
   Serial.begin(115200);
-  delay(500);
 
   // start communication with IMU
   while (1) {
-    int status = IMU.begin();
+    int status = imu.begin();
     if (status < 0) {
       Serial.println("IMU initialization unsuccessful");
       Serial.println("Check IMU wiring or try cycling power");
@@ -39,6 +36,31 @@ void setup() {
     }
   }
 
+  delay(2500);
+  Serial.print(
+      "Calibrating magnetometer, please slowly move in a figure 8 until "
+      "complete...");
+  imu.calibrateMag();
+  Serial.println("Done!");
+  Serial.print("Saving results to EEPROM...");
+  /* Save to EEPROM */
+  value = imu.getMagBiasX_uT();
+  memcpy(eeprom_buffer, &value, sizeof(value));
+  value = imu.getMagBiasY_uT();
+  memcpy(eeprom_buffer + 4, &value, sizeof(value));
+  value = imu.getMagBiasZ_uT();
+  memcpy(eeprom_buffer + 8, &value, sizeof(value));
+  value = imu.getMagScaleFactorX();
+  memcpy(eeprom_buffer + 12, &value, sizeof(value));
+  value = imu.getMagScaleFactorY();
+  memcpy(eeprom_buffer + 16, &value, sizeof(value));
+  value = imu.getMagScaleFactorZ();
+  memcpy(eeprom_buffer + 20, &value, sizeof(value));
+  for (unsigned int i = 0; i < sizeof(eeprom_buffer); i++) {
+    EEPROM.write(i, eeprom_buffer[i]);
+  }
+  Serial.println("Done! You may power off your board.");
+  getCalibratedData();
   // Wire.begin(SDA_PIN, SCL_PIN);
 
   // Wire.setClock(400000);
@@ -58,22 +80,35 @@ void setup() {
   // Serial.println("done bme280");
 }
 
+void getCalibratedData() {
+  std::stringstream ss;
+  ss.precision(1);
+
+  ss << std::fixed << "bX=" << imu.getMagBiasX_uT() << ", "
+     << "bY=" << imu.getMagBiasY_uT() << ", "
+     << "bZ=" << imu.getMagBiasZ_uT() << ", "
+     << "sX=" << imu.getMagScaleFactorX() << ", "
+     << "sY=" << imu.getMagScaleFactorY() << ", "
+     << "sZ=" << imu.getMagScaleFactorZ() << ", " << std::endl;
+  Serial.println(ss.str().c_str());
+}
+
 void loop() {
   // IMU.readSensor();
+  getCalibratedData();
+  // // // printScaledAGMT(myICM.agmt);
+  // float magX = imu.getMagX_uT();
+  // float magY = imu.getMagY_uT();
+  // float magZ = imu.getMagZ_uT();
 
-  // // printScaledAGMT(myICM.agmt);
-  float magX = IMU.getMagX_uT();
-  float magY = IMU.getMagY_uT();
-  float magZ = IMU.getMagZ_uT();
-
-  Serial.print(" ], Mag (uT) [ ");
-  printFormattedFloat(magX, 5, 2);
-  Serial.print(", ");
-  printFormattedFloat(magY, 5, 2);
-  Serial.print(", ");
-  printFormattedFloat(magZ, 5, 2);
-  Serial.print(" ]");
-  Serial.println();
+  // Serial.print(" ], Mag (uT) [ ");
+  // printFormattedFloat(magX, 5, 2);
+  // Serial.print(", ");
+  // printFormattedFloat(magY, 5, 2);
+  // Serial.print(", ");
+  // printFormattedFloat(magZ, 5, 2);
+  // Serial.print(" ]");
+  // Serial.println();
 
   // auto direction = get_direction(magX, magY, magZ);
   // auto direction = get_direction(-11.3, 14.3, -47.4);
@@ -83,10 +118,16 @@ void loop() {
   delay(2500);
 }
 
+// CalibratedData:
+// 8 fig vertical and hoz: bX=39.0, bY=52.0, bZ=18.1, sX=1.0, sY=0.8, sZ=1.4,
+// 8 fig stop before     : bX=46.5, bY=46.8, bZ=39.6, sX=1.0, sY=0.9, sZ=1
+
 // Sparkfun:
 // Accel: 0.14, -0.86, 0.76 g
 // Gyro: -2.74, -1.10, 1.04 dps
 // Mag: 71.57, 50.41, 34.96 uT
+// Borderflight:
+// ], Mag (uT) [  00073.24,  00051.40,  00034.79 ]
 
 void printFormattedFloat(float val, uint8_t leading, uint8_t decimals) {
   float aval = abs(val);
