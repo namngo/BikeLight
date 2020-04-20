@@ -12,9 +12,11 @@
 #define SCL_PIN 22
 #define MPU_INT_PIN 19
 
+float window_size = 20;
+
 // 8 fig vertical and hoz: bX=39.0, bY=52.0, bZ=18.1, sX=1.0, sY=0.8, sZ=1.4,
-// Scale X, bias X, scale Y, bias Y...
-std::vector<float> MpuCalibrated = {1.0, 39.0, 0.8, 52.0, 1.4, 1.0};
+// bias X, Scale X, bias Y, scale Y...
+std::vector<float> CalData = {39.0, 1.0, 52.0, 0.8, 18.1, 1.4};
 
 MPU9250 imu(Wire, 0x68);
 
@@ -40,31 +42,10 @@ void setup() {
     }
   }
 
-  delay(2500);
-  Serial.print(
-      "Calibrating magnetometer, please slowly move in a figure 8 until "
-      "complete...");
-  imu.calibrateMag();
-  Serial.println("Done!");
-  Serial.print("Saving results to EEPROM...");
-  /* Save to EEPROM */
-  value = imu.getMagBiasX_uT();
-  memcpy(eeprom_buffer, &value, sizeof(value));
-  value = imu.getMagBiasY_uT();
-  memcpy(eeprom_buffer + 4, &value, sizeof(value));
-  value = imu.getMagBiasZ_uT();
-  memcpy(eeprom_buffer + 8, &value, sizeof(value));
-  value = imu.getMagScaleFactorX();
-  memcpy(eeprom_buffer + 12, &value, sizeof(value));
-  value = imu.getMagScaleFactorY();
-  memcpy(eeprom_buffer + 16, &value, sizeof(value));
-  value = imu.getMagScaleFactorZ();
-  memcpy(eeprom_buffer + 20, &value, sizeof(value));
-  for (unsigned int i = 0; i < sizeof(eeprom_buffer); i++) {
-    EEPROM.write(i, eeprom_buffer[i]);
-  }
-  Serial.println("Done! You may power off your board.");
-  getCalibratedData();
+  imu.setMagCalX(CalData[0], CalData[1]);
+  imu.setMagCalY(CalData[2], CalData[3]);
+  imu.setMagCalZ(CalData[4], CalData[5]);
+
   // Wire.begin(SDA_PIN, SCL_PIN);
 
   // Wire.setClock(400000);
@@ -98,28 +79,24 @@ void getCalibratedData() {
 }
 
 void loop() {
-  // IMU.readSensor();
-  getCalibratedData();
-  // // // printScaledAGMT(myICM.agmt);
-  // float magX = imu.getMagX_uT();
-  // float magY = imu.getMagY_uT();
-  // float magZ = imu.getMagZ_uT();
+  imu.readSensor();
+  float magX = imu.getMagX_uT();
+  float magY = imu.getMagY_uT();
+  float magZ = imu.getMagZ_uT();
 
-  // Serial.print(" ], Mag (uT) [ ");
-  // printFormattedFloat(magX, 5, 2);
-  // Serial.print(", ");
-  // printFormattedFloat(magY, 5, 2);
-  // Serial.print(", ");
-  // printFormattedFloat(magZ, 5, 2);
-  // Serial.print(" ]");
-  // Serial.println();
+  std::stringstream ss;
+  ss.precision(1);
+  ss << std::fixed << "Mag (uT) [" << magX << ", " << magY << ", " << magZ
+     << "]" << std::endl;
+  Serial.println(ss.str().c_str());
 
-  // auto direction = get_direction(magX, magY, magZ);
+  auto direction = get_direction(magX, magY, magZ);
   // auto direction = get_direction(-11.3, 14.3, -47.4);
-  // Serial.println(direction);
-  // delay(30);
+  Serial.println(direction);
 
-  delay(2500);
+  auto heading = get_heading(magX, magY, magZ);
+
+  delay(3000);
 }
 
 // CalibratedData:
@@ -132,33 +109,37 @@ void loop() {
 // Mag: 71.57, 50.41, 34.96 uT
 // Borderflight:
 // ], Mag (uT) [  00073.24,  00051.40,  00034.79 ]
+// Borderflight calibreated:
+// Mag (uT) [  00039.47,  00007.19,  00027.02 ]
 
-void printFormattedFloat(float val, uint8_t leading, uint8_t decimals) {
-  float aval = abs(val);
-  if (val < 0) {
-    Serial.print("-");
-  } else {
-    Serial.print(" ");
-  }
-  for (uint8_t indi = 0; indi < leading; indi++) {
-    uint32_t tenpow = 0;
-    if (indi < (leading - 1)) {
-      tenpow = 1;
-    }
-    for (uint8_t c = 0; c < (leading - 1 - indi); c++) {
-      tenpow *= 10;
-    }
-    if (aval < tenpow) {
-      Serial.print("0");
-    } else {
-      break;
-    }
-  }
-  if (val < 0) {
-    Serial.print(-val, decimals);
-  } else {
-    Serial.print(val, decimals);
-  }
+String get_heading(float hx, float hy, float hz) {
+  float h = sqrtf(hx * hx + hy * hy + hz * hz);
+  hx /= h;
+  hy /= h;
+  hz /= h;
+
+  /* Compute euler angles */
+  float yaw_rad = atan2f(-hy, hx);
+  float heading_rad = constrainAngle360(yaw_rad);
+  /* Filtering heading */
+  float filtered_heading_rad =
+      (filtered_heading_rad * (window_size - 1.0f) + heading_rad) / window_size;
+
+  /* Display the results */
+  Serial.print(yaw_rad * RAD_TO_DEG);
+  Serial.print("\t");
+  Serial.print(heading_rad * RAD_TO_DEG);
+  Serial.print("\t");
+  Serial.println(filtered_heading_rad * RAD_TO_DEG);
+
+  return "";
+}
+
+/* Bound angle between 0 and 360 */
+float constrainAngle360(float dta) {
+  dta = fmod(dta, 2.0 * PI);
+  if (dta < 0.0) dta += 2.0 * PI;
+  return dta;
 }
 
 String get_direction(float x, float y, float z) {
