@@ -1,83 +1,82 @@
-#include <Adafruit_BME280.h>
-//  #include <ICM_20948.h>
+#include <MPU9250.h>
 #include <Wire.h>
-#include <samd.h>
 
-#include "ICM20948/Icm20948.h"
-#include "ICM20948/Icm20948MPUFifoControl.h"
-#include "ICM20948/SensorTypes.h"
-
-// #include "ICM20948.h"
-
-// ICM_20948_I2C myICM;
-// Adafruit_BME280 bme;
-
-#define ICM_I2C_ADDR_REVA
-#define AD0_VAL 0
-#define BME280_ADDR 0x76  // or 0x77
-#define LED_BUILTIN 38
-
-// ICM20948 IMU(Wire, 0x68);
+#define SDA_PIN 21
+#define SCL_PIN 22
+#define MPU_INT_PIN 19
+#define LED_BUILTIN 16
 
 void setup() {
-  SerialUSB.begin(115200);
-  // while (!SerialUSB)
-  //   ;
+  Serial.begin(115200);
   delay(500);
   pinMode(LED_BUILTIN, OUTPUT);
-  Wire.begin();
-  Wire.setClock(400000);
-  // SerialUSB.println("begining bme280");
+
+  Wire.begin(SDA_PIN, SCL_PIN);
+  Serial.println("init");
+  // Wire.setClock(400000);
+  // Serial.println("begining bme280");
   // if (!bme.begin(BME280_ADDR, &Wire)) {
-  //   SerialUSB.println(
+  //   Serial.println(
   //       "Could not find a valid BME280 sensor, check wiring, address, "
   //       "sensorID!");
-  //   SerialUSB.print("SensorID was: 0x");
-  //   SerialUSB.print(
+  //   Serial.print("SensorID was: 0x");
+  //   Serial.print(
   //       "        ID of 0xFF probably means a bad address, a BMP 180 or BMP "
   //       "085\n");
-  //   SerialUSB.print("   ID of 0x56-0x58 represents a BMP 280,\n");
-  //   SerialUSB.print("        ID of 0x60 represents a BME 280.\n");
-  //   SerialUSB.print("        ID of 0x61 represents a BME 680.\n");
+  //   Serial.print("   ID of 0x56-0x58 represents a BMP 280,\n");
+  //   Serial.print("        ID of 0x60 represents a BME 280.\n");
+  //   Serial.print("        ID of 0x61 represents a BME 680.\n");
   // }
-  // SerialUSB.println("done bme280");
-
-  auto icm_init = false;
+  // Serial.println("done bme280");
 
   // while (!icm_init) {
-  //   SerialUSB.println("begining icm");
+  //   Serial.println("begining icm");
   //   myICM.begin(Wire, AD0_VAL);
-  //   SerialUSB.println(myICM.statusString());
+  //   Serial.println(myICM.statusString());
   //   if (myICM.status != ICM_20948_Stat_Ok) {
-  //     SerialUSB.println("Trying again...");
+  //     Serial.println("Trying again...");
   //     delay(500);
   //   } else {
   //     icm_init = true;
-  //     SerialUSB.println("init!");
+  //     Serial.println("init!");
   //   }
   // }
+}
 
-  int status = -1;
-  while (status < 0) {
-    status = IMU.begin();
-    SerialUSB.print("status = ");
-    SerialUSB.println(status);
-    if (status < 0) {
-      SerialUSB.println("IMU initialization unsuccessful");
-      SerialUSB.println("Check IMU wiring or try cycling power");
-      SerialUSB.print("Status: ");
-      SerialUSB.println(status);
-      delay(500);
-    }
-  }
+void loop() {
+  // IMU.readSensor();
+  Serial.println("blink");
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(500);
+  digitalWrite(LED_BUILTIN, LOW);
+
+  // //   // printScaledAGMT(myICM.agmt);
+  // float magX = IMU.getMagX_uT();
+  // float magY = IMU.getMagY_uT();
+  // float magZ = IMU.getMagZ_uT();
+
+  // Serial.print(" ], Mag (uT) [ ");
+  // printFormattedFloat(magX, 5, 2);
+  // Serial.print(", ");
+  // printFormattedFloat(magY, 5, 2);
+  // Serial.print(", ");
+  // printFormattedFloat(magZ, 5, 2);
+  // Serial.print(" ]");
+  // Serial.println();
+
+  // auto direction = get_direction(magX, magY, magZ);
+  // Serial.println(direction);
+  // delay(30);
+
+  delay(500);
 }
 
 void printFormattedFloat(float val, uint8_t leading, uint8_t decimals) {
   float aval = abs(val);
   if (val < 0) {
-    SerialUSB.print("-");
+    Serial.print("-");
   } else {
-    SerialUSB.print(" ");
+    Serial.print(" ");
   }
   for (uint8_t indi = 0; indi < leading; indi++) {
     uint32_t tenpow = 0;
@@ -88,15 +87,15 @@ void printFormattedFloat(float val, uint8_t leading, uint8_t decimals) {
       tenpow *= 10;
     }
     if (aval < tenpow) {
-      SerialUSB.print("0");
+      Serial.print("0");
     } else {
       break;
     }
   }
   if (val < 0) {
-    SerialUSB.print(-val, decimals);
+    Serial.print(-val, decimals);
   } else {
-    SerialUSB.print(val, decimals);
+    Serial.print(val, decimals);
   }
 }
 
@@ -133,30 +132,6 @@ String get_direction(float x, float y, float z) {
     direction = "dont know";
   }
   return String(heading) + " : " + direction;
-}
-
-void loop() {
-  IMU.readSensor();
-
-  //   // printScaledAGMT(myICM.agmt);
-  float magX = IMU.getMagX_uT();
-  float magY = IMU.getMagY_uT();
-  float magZ = IMU.getMagZ_uT();
-
-  SerialUSB.print(" ], Mag (uT) [ ");
-  printFormattedFloat(magX, 5, 2);
-  SerialUSB.print(", ");
-  printFormattedFloat(magY, 5, 2);
-  SerialUSB.print(", ");
-  printFormattedFloat(magZ, 5, 2);
-  SerialUSB.print(" ]");
-  SerialUSB.println();
-
-  auto direction = get_direction(magX, magY, magZ);
-  SerialUSB.println(direction);
-  delay(30);
-
-  delay(2000);
 }
 
 // Note:

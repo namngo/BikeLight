@@ -1,6 +1,7 @@
 {
     "sketch": "bike_sensor.ino",
-    "board": "arduino:samd:arduino_zero_edbg",
+    "board": "esp32:esp32:esp32",
     "port": "COM6",
-    "programmer": "Atmel-ICE (AVR)"
+    "programmer": "AVR ISP",
+    "configuration": "PSRAM=disabled,PartitionScheme=default,CPUFreq=240,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,DebugLevel=none"
 }
