@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "Library")(type "KiCad")(uri "/Users/namngo/hobby/BikeLight/boards/Library.kicad_sym")(options "")(descr ""))
+  (lib (name "1_PowerICs")(type "KiCad")(uri "/Users/namngo/hobby/BikeLight/boards/Library/1_PowerICs.kicad_sym")(options "")(descr ""))
+)
