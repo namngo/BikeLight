@@ -10,6 +10,7 @@
 #include "led_strip.h"
 
 #define WAKEUP_INPUT_PIN GPIO_NUM_1
+#define SLEEP_INPUT_PIN GPIO_NUM_2
 #define LED_PIN GPIO_NUM_2
 #define RGB_LED_PIN GPIO_NUM_48
 
@@ -76,13 +77,13 @@ static void blink_rgb_led(led_strip_handle_t led_strip, uint8_t s_led_state)
 }
 
 static void go_sleep(gpio_num_t wakeup_pin) {
-    ESP_ERROR_CHECK(esp_sleep_enable_ext0_wakeup(wakeup_pin, 0));
+    ESP_ERROR_CHECK(esp_sleep_enable_ext0_wakeup(wakeup_pin, 1));
     ESP_ERROR_CHECK(rtc_gpio_pullup_dis(wakeup_pin));
     ESP_ERROR_CHECK(rtc_gpio_pulldown_en(wakeup_pin));
 
     printf("Going to sleep in 3s. \n");
-    vTaskDelay(3000 / portTICK_PERIOD_MS);
-    printf("Going to sleep in now. \n");
+    // vTaskDelay(3000 / portTICK_PERIOD_MS);
+    // printf("Going to sleep in now. \n");
 
     esp_deep_sleep_start();
 }
@@ -92,13 +93,15 @@ extern "C" {
 void app_main(void)
 {
     led_strip = configure_rgb_led(RGB_LED_PIN);
+     vTaskDelay(2000 / portTICK_PERIOD_MS);
 
-    setup_gpio(WAKEUP_INPUT_PIN);
-    int wakeup_level = gpio_get_level(WAKEUP_INPUT_PIN);
+    setup_gpio(SLEEP_INPUT_PIN);
+    int wakeup_level = gpio_get_level(SLEEP_INPUT_PIN);
     if (wakeup_level == 1) {
         printf("wakeup pin is high, not sleeping. \n");
     } else {
         printf("wakeup pin is low, turn off the led and sleeping. \n");
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
         blink_rgb_led(led_strip, 0);
         go_sleep(WAKEUP_INPUT_PIN);
     }
