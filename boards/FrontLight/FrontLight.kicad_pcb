@@ -7767,6 +7767,19 @@
 		(layer "Edge.Cuts")
 		(uuid "e6b1be1f-55a9-4989-8b44-5a8eb213ed05")
 	)
+	(gr_text "Bike Light V2.\nMP2410.\nJan 2026."
+		(at 116.75 50 0)
+		(layer "B.SilkS")
+		(uuid "1d9ffd2d-5341-48b4-ad22-e3f1f01a2b60")
+		(effects
+			(font
+				(size 1.5 1.5)
+				(thickness 0.3)
+				(bold yes)
+			)
+			(justify left bottom mirror)
+		)
+	)
 	(segment
 		(start 87.3375 65.7225)
 		(end 85.115 63.5)
