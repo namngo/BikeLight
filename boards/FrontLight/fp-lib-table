@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "libraries")(type "KiCad")(uri "/Users/namngo/hobby/BikeLight/boards/libraries.pretty")(options "")(descr ""))
+)
