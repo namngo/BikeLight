@@ -34,7 +34,46 @@
 		(45 "User.4" user)
 	)
 	(setup
-		(pad_to_mask_clearance 0)
+		(stackup
+			(layer "F.SilkS"
+				(type "Top Silk Screen")
+			)
+			(layer "F.Paste"
+				(type "Top Solder Paste")
+			)
+			(layer "F.Mask"
+				(type "Top Solder Mask")
+				(thickness 0.01)
+			)
+			(layer "F.Cu"
+				(type "copper")
+				(thickness 0.035)
+			)
+			(layer "dielectric 1"
+				(type "core")
+				(thickness 1.51)
+				(material "FR4")
+				(epsilon_r 4.5)
+				(loss_tangent 0.02)
+			)
+			(layer "B.Cu"
+				(type "copper")
+				(thickness 0.035)
+			)
+			(layer "B.Mask"
+				(type "Bottom Solder Mask")
+				(thickness 0.01)
+			)
+			(layer "B.Paste"
+				(type "Bottom Solder Paste")
+			)
+			(layer "B.SilkS"
+				(type "Bottom Silk Screen")
+			)
+			(copper_finish "None")
+			(dielectric_constraints no)
+		)
+		(pad_to_mask_clearance 0.0508)
 		(allow_soldermask_bridges_in_footprints no)
 		(tenting front back)
 		(pcbplotparams
@@ -10825,7 +10864,7 @@
 				(xy 94.723907 72.136634) (xy 94.723914 72.136632) (xy 94.887782 72.027139) (xy 94.887785 72.027136)
 				(xy 95.026503 71.888419) (xy 95.087826 71.854934) (xy 95.114184 71.8521) (xy 96.44924 71.8521) (xy 96.516279 71.871785)
 				(xy 96.536921 71.888419) (xy 97.7682 73.119698) (xy 97.880302 73.2318) (xy 98.017598 73.311067)
-				(xy 98.170732 73.3521) (xy 100.23924 73.3521) (xy 100.26868 73.360744) (xy 100.298667 73.367268)
+				(xy 98.170732 73.3521) (xy 98.329268 73.3521) (xy 100.23924 73.3521) (xy 100.26868 73.360744) (xy 100.298667 73.367268)
 				(xy 100.303682 73.371022) (xy 100.306279 73.371785) (xy 100.326921 73.388419) (xy 100.376321 73.437819)
 				(xy 100.409806 73.499142) (xy 100.404822 73.568834) (xy 100.36295 73.624767) (xy 100.297486 73.649184)
 				(xy 100.28864 73.6495) (xy 100.143713 73.6495) (xy 100.095042 73.657208) (xy 99.93376 73.682753)
