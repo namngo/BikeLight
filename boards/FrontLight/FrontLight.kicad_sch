@@ -2810,7 +2810,7 @@
 	)
 	(global_label "LED_DIM"
 		(shape input)
-		(at 106.68 66.04 270)
+		(at 118.11 113.03 270)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2820,7 +2820,7 @@
 		)
 		(uuid "6d38517d-2ea0-4285-99ea-3bc46caa25dc")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 106.68 76.7661 90)
+			(at 118.11 123.7561 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4173,16 +4173,15 @@
 	)
 	(symbol
 		(lib_id "power:+1V1")
-		(at 109.22 66.04 180)
+		(at 120.65 113.03 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "5c403b8a-8c16-46cd-aa92-1b20702f21fb")
 		(property "Reference" "#PWR012"
-			(at 109.22 62.23 0)
+			(at 120.65 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4191,7 +4190,7 @@
 			)
 		)
 		(property "Value" "+1V1"
-			(at 109.22 71.12 0)
+			(at 122.936 112.776 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4199,7 +4198,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 109.22 66.04 0)
+			(at 120.65 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4208,7 +4207,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 109.22 66.04 0)
+			(at 120.65 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4217,7 +4216,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+1V1\""
-			(at 109.22 66.04 0)
+			(at 120.65 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4720,7 +4719,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x03_Pin")
-		(at 106.68 60.96 270)
+		(at 118.11 107.95 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4728,7 +4727,7 @@
 		(dnp no)
 		(uuid "6b249c5a-bdf8-4a7b-bc64-2ae42af3efbf")
 		(property "Reference" "J_LED_DIM1"
-			(at 107.188 58.674 90)
+			(at 117.602 106.934 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4736,15 +4735,16 @@
 			)
 		)
 		(property "Value" "DIM"
-			(at 106.68 58.42 90)
+			(at 118.11 105.41 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
-			(at 106.68 60.96 0)
+			(at 118.11 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4753,7 +4753,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 106.68 60.96 0)
+			(at 118.11 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4762,7 +4762,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated"
-			(at 106.68 60.96 0)
+			(at 118.11 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5601,16 +5601,15 @@
 	)
 	(symbol
 		(lib_id "power:+2V5")
-		(at 104.14 66.04 180)
+		(at 115.57 113.03 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "b9035651-de86-494e-add2-1edfbb226074")
 		(property "Reference" "#PWR010"
-			(at 104.14 62.23 0)
+			(at 115.57 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5619,7 +5618,7 @@
 			)
 		)
 		(property "Value" "+2V5"
-			(at 104.14 71.12 0)
+			(at 112.522 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5627,7 +5626,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 104.14 66.04 0)
+			(at 115.57 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5636,7 +5635,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 104.14 66.04 0)
+			(at 115.57 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5645,7 +5644,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+2V5\""
-			(at 104.14 66.04 0)
+			(at 115.57 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
