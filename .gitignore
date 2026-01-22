@@ -2,10 +2,12 @@
 board/carlightboard/BoardOutput/
 **/BoardOutput/*
 output/
+export/
 *.zip
 *.b#*
 *.s#*
 *.l#*
+.DS_Store
 secret.txt
 
 
