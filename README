@@ -1,3 +1,40 @@
 Led controller chip:
 https://www.monolithicpower.com/en/documentview/productdocument/index/version/2/document_type/Datasheet/lang/en/sku/MP2410/document_id/2079
 https://www.monolithicpower.com/en/documentview/productdocument/index/version/2/document_type/Datasheet/lang/en/sku/EV2410-J-00A/document_id/2797/
+
+
+## Part links
+
+
+### Screens
+* Screen: https://www.aliexpress.us/item/3256804050802693.html?spm=a2g0o.order_list.order_list_main.81.6dc41802Oe7kPv&gatewayAdapt=glo2usa#nav-specification
+
+### ESP32
+
+#### Esp32 super mini
+
+* ESP32 module: https://www.aliexpress.us/item/3256810393697250.html?spm=a2g0o.order_list.order_list_main.29.6dc41802Oe7kPv&gatewayAdapt=glo2usa#nav-specification
+
+```
+Product parameter
+
+Powerful CPU: ESP32-S3, 32-bit RISC-V single-core processor, running at up to 160 MHz
+
+WiFi: 802.11b/g/n protocol, 2.4GhHz, support Station mode, SoftAP mode, SoftAP+Station mode, hybrid mode
+
+Bluetooth: Bluetooth 5.0
+
+Ultra-low power consumption: deep sleep power consumption of about 43μA
+
+Rich board resources: 400KB SRAM, 384KB ROM built-in 4Mflash.
+
+Chip model: ESP32S3FH4R2
+
+Ultra-small size: As small as the thumb (22.52x18mm) classic shape, suitable for wearables and small projects
+
+Reliable security features: Encryption hardware accelerators that support AES-128/256, hashing, RSA, HMAC, digital signatures, and secure startup
+
+Rich interface: 1xI2C, 1xSPI, 2xUART, 11xGPIO(PWM), 4xADC
+
+Onboard RGB, blue LED: common GPIO 48 pin
+```
