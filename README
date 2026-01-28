@@ -37,4 +37,9 @@ Reliable security features: Encryption hardware accelerators that support AES-12
 Rich interface: 1xI2C, 1xSPI, 2xUART, 11xGPIO(PWM), 4xADC
 
 Onboard RGB, blue LED: common GPIO 48 pin
+
 ```
+
+## Research
+
+https://michaelmanning.ca/e-paper-climate-logger/
